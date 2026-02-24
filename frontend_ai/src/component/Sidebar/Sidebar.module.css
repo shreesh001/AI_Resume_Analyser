@@ -31,11 +31,20 @@
     font-size: 22px;
     font-weight: 500;
     cursor: pointer;
-    text-decoration: none;
+    text-decoration:none;
+}
+
+.active{
+    background-color:#FBEAEB;
+    color: #2F3C7E;
+    border-radius: 12px;
+}
+
+.sidebarOptionName{
+    text-decoration:none;
 }
 
 .sidebarOption:hover{
-    background-color: #FBEAEB;
-    color: #2F3C7E;
-    border-radius: 12px;
+    opacity: 0.83;
+    border-radius: 10px;
 }   

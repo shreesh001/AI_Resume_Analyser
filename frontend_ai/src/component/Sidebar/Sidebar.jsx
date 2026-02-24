@@ -5,33 +5,39 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import HistoryIcon from '@mui/icons-material/RestorePage';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
+  const location = useLocation();
+  console.log(location);
   return (
     <div className={styles.sidebar}>
         <div className={styles.sidebaricon}>
           <DocumentScannerIcon sx={{fontSize:54,marginBottom:2}}/>
             <div className={styles.sidebaricontext}>
-                Resume Analyser
+                AI Resume 
+                Analyser
             </div>
         </div>
 
         {/* This is sidebar options */}
         <div className={styles.sidebarOptions}>
-          <div className={styles.sidebarOption}>
-            <DashboardIcon sx={{fontSize:30,marginRight:2}}/> 
-            <div className={styles.sidebarOptionName}>DashBoard</div>
-          </div>
 
-          <div className={styles.sidebarOption}>
-            <HistoryIcon sx={{fontSize:30,marginRight:2}}/> 
-            <div className={styles.sidebarOptionName}>History</div>
-          </div>
+          <Link to="/dashboard" className={styles.sidebarOption + (location.pathname === '/dashboard' ? ' ' + styles.active : '')}>
+              <DashboardIcon sx={{fontSize:30,marginRight:2}}/> 
+              <div className={styles.sidebarOptionName}>DashBoard</div>
+          </Link>
 
-          <div className={styles.sidebarOption}>
-            <AdminPanelSettingsIcon sx={{fontSize:30,marginRight:2}}/> 
-            <div className={styles.sidebarOptionName}>Admin Panel</div>
-          </div>
+          <Link to="/history" className={styles.sidebarOption + (location.pathname === '/history' ? ' ' + styles.active : '')}>
+              <HistoryIcon sx={{fontSize:30,marginRight:2}}/> 
+              <div className={styles.sidebarOptionName}>History</div>
+          </Link>
+
+  
+            <Link to="/admin" className={styles.sidebarOption + (location.pathname === '/admin' ? ' ' + styles.active : '')}>
+              <AdminPanelSettingsIcon sx={{fontSize:30,marginRight:2}}/> 
+              <div className={styles.sidebarOptionName}>Admin Panel</div>
+          </Link>
 
           <div className={styles.sidebarOption}>
             <LogoutIcon sx={{fontSize:30,marginRight:2}}/> 

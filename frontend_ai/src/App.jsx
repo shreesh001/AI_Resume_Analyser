@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Sidebar from './component/Sidebar/Sidebar'
 import {Routes,Route} from 'react-router-dom'
-import Dashboard from './component/Dashboard/Dashboard'
+import Dashboard from './component/DashBoard/Dashboard'
 import Admin from './component/Admin/Admin'
 import History from './component/History/History'
 

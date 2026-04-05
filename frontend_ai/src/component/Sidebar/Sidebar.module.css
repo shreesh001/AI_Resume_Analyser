@@ -1,7 +1,7 @@
 .sidebar{
     flex:0.2;
     background-color: #2F3C7E;
-    height: 100vh;
+    height: 120vh;
     flex-shrink: 0;
 }
 /* color for background #FBEAEB */

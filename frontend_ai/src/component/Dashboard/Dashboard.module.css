@@ -190,21 +190,8 @@ h2 {
         margin-top: 30px;
     }
     .section{
+        width: 100%;
         flex-direction: column;
-    }
-    .DashboardResumeBlock{
-        width: 100%;
-    }
-    .DashboardInputField{
-        width: 100%;
-    }
-    label{
-        width: 100%;
-        text-align: center;
-    }
-    .jobDesc{
-        flex-direction: column;
-        gap: 20px;
     }
     .textarea{
         width: 100%;

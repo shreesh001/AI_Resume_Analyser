@@ -7,7 +7,7 @@ import {Routes,Route} from 'react-router-dom'
 import Dashboard from './component/DashBoard/Dashboard'
 import Admin from './component/Admin/Admin'
 import History from './component/History/History'
-
+import Login from './component/Login/Login'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,6 +16,7 @@ function App() {
     <div className='App'>
       <Sidebar/>
       <Routes>
+        <Route path='/' element={<Login/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
         <Route path='/admin' element={<Admin/>}/>
         <Route path='/history' element={<History/>}/>

@@ -1,18 +1,18 @@
-body{
-  margin:0;
-  padding:0;
+body {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-.App{
-  display:flex;
-  flex:0;
+.App {
+  display: flex;
+  min-height: 100vh;
   box-sizing: border-box;
 }
- /*to make the app responsive*/
-@media screen and (max-width: 768px){
-  .App{
+
+@media screen and (max-width: 768px) {
+  .App {
     flex-direction: column;
   }
 }

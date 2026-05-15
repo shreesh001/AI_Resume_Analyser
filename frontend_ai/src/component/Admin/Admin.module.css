@@ -1,0 +1,67 @@
+.Admin {
+  flex: 1;
+  min-height: 100vh;
+  overflow: auto;
+  padding: 48px 40px;
+  background-color: #f8f9fb;
+  box-sizing: border-box;
+}
+
+.AdminCardBlock {
+  width: 100%;
+  display: grid;
+  gap: 24px;                              /* slightly more breathing room */
+  grid-template-columns: repeat(4, 1fr);
+  padding: 8px;                           /* prevents shadow clipping at edges */
+}
+
+.AdminCard {
+  width: 100%;
+  background-color: #ffffff;
+  padding: 24px 20px;
+  border-radius: 18px;
+  border: 1px solid #e5e7eb;             /* ← adds a clear visible edge */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.AdminCard:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+  border-color: #c7d2fe;                 /* subtle indigo tint on hover */
+}
+
+.CardName {
+  font-size: 38px;
+  text-align: center;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+@media screen and (max-width: 1100px) {
+  .AdminCardBlock {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .Admin {
+    padding: 30px 16px;
+  }
+
+  .AdminCardBlock {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .AdminCardBlock {
+    grid-template-columns: 1fr;
+  }
+}

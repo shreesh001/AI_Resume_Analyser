@@ -4,6 +4,9 @@ import NotificationImportantIcon from "@mui/icons-material/NotificationImportant
 import ArticleIcon from "@mui/icons-material/Article";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import Skeleton from "@mui/material/Skeleton";
+import { BiBorderRadius } from "react-icons/bi";
+import withAuthHOC from "../../utils/HOC/withAuthHOC";
 
 const Dashboard = () => {
   const [jobDescription, setJobDescription] = useState("");
@@ -87,7 +90,7 @@ const Dashboard = () => {
         </div>
 
 
-        <div className={styles.analysisPlaceholder}>
+        {/* <div className={styles.analysisPlaceholder}>
           <div className={styles.analysisText}>Result</div>
           <div className={styles.resultScore}>
             73%
@@ -96,12 +99,13 @@ const Dashboard = () => {
           
           <div className={styles.resultText}>
             <h2>Feedback :</h2>
-            <p className={styles.feedback}>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates nam dolorem error dignissimos sunt atque, at earum officiis beatae sit velit perspiciatis itaque dolor aliquid molestias qui totam, laudantium vitae iusto accusantium eveniet eum quo! Distinctio dolorum iste impedit, asperiores atque dolore placeat a illo voluptas sapiente, repellendus porro qui dicta! Veniam odio repellat doloremque optio, natus modi voluptatibus necessitatibus animi vitae sint. Pariatur enim sequi dignissimos fugit totam nisi culpa, laboriosam ipsa eligendi corrupti.</p>
+            <p className={styles.feedback}>Lorem  eaque omnis officia dolorum distinctio veniam unde nam, illum aperiam nesciunt porro, et necessitatibus! Officiis maxime aliquid doloribus iste illum voluptatibus et in consectetur consequuntur eius?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates nam dolorem error dignissimos sunt atque, at earum officiis beatae sit velit perspiciatis itaque dolor aliquid molestias qui totam, laudantium vitae iusto accusantium eveniet eum quo! Distinctio dolorum iste impedit, asperiores atque dolore placeat a illo voluptas sapiente, repellendus porro qui dicta! Veniam odio repellat doloremque optio, natus modi voluptatibus necessitatibus animi vitae sint. Pariatur enim sequi dignissimos fugit totam nisi culpa, laboriosam ipsa eligendi corrupti.</p>
           </div>
-        </div>
+        </div> */}
+        <Skeleton variant="rectangular" width={300} height={500} sx={{borderRadius:"20px"}} />
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default withAuthHOC(Dashboard);

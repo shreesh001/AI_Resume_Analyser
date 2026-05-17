@@ -11,8 +11,11 @@
     "start": "nodemon index.js"
   },
   "dependencies": {
+    "cohere-ai": "^8.0.0",
     "express": "^5.2.1",
     "mongoose": "^9.6.2",
-    "nodemon": "^3.1.14"
+    "multer": "^2.1.1",
+    "nodemon": "^3.1.14",
+    "pdf-parse": "^1.1.1"
   }
 }

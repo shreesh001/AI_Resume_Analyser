@@ -20,6 +20,12 @@ const ResumeSchema= new mongoose.Schema({
     },
     feedback:{
         type:String,
+    },
+    matchedSkills:{
+        type:[String],
+    },
+    missingSkills:{
+        type:[String],
     }
 },{timestamps:true})
 

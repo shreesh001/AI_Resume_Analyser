@@ -10,9 +10,9 @@
 .AdminCardBlock {
   width: 100%;
   display: grid;
-  gap: 24px;                              /* slightly more breathing room */
+  gap: 24px;
   grid-template-columns: repeat(4, 1fr);
-  padding: 8px;                           /* prevents shadow clipping at edges */
+  padding: 8px;
 }
 
 .AdminCard {
@@ -20,12 +20,12 @@
   background-color: #ffffff;
   padding: 24px 20px;
   border-radius: 18px;
-  border: 1px solid #e5e7eb;             /* ← adds a clear visible edge */
+  border: 1px solid #e5e7eb;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: flex-start;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-sizing: border-box;
@@ -34,16 +34,89 @@
 .AdminCard:hover {
   transform: translateY(-3px);
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-  border-color: #c7d2fe;                 /* subtle indigo tint on hover */
+  border-color: #c7d2fe;
 }
 
 .CardName {
-  font-size: 38px;
-  text-align: center;
+  font-size: 20px;
   font-weight: 700;
   color: #1f2937;
 }
 
+.CardEmail {
+  font-size: 13px;
+  color: #3b82f6;
+  margin: 0;
+}
+
+.CardScore {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* ── Skill block ── */
+.SkillSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.SkillLabel {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.SkillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.TagGreen {
+  display: inline-block;
+  padding: 3px 10px;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.TagRed {
+  display: inline-block;
+  padding: 3px 10px;
+  background-color: #fff1f2;
+  color: #e11d48;
+  border: 1px solid #fecdd3;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* ── Feedback ── */
+.FeedbackSection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.FeedbackText {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ── Responsive ── */
 @media screen and (max-width: 1100px) {
   .AdminCardBlock {
     grid-template-columns: repeat(3, 1fr);
@@ -54,7 +127,6 @@
   .Admin {
     padding: 30px 16px;
   }
-
   .AdminCardBlock {
     grid-template-columns: repeat(2, 1fr);
   }

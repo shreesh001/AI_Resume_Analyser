@@ -108,7 +108,7 @@ exports.getallResumeforUser = async (req, res) => {
 
 exports.getallResumeforAdmin = async (req, res) => {
     try {
-        let resumes = await resumeModel.find({}).sort({ createdAt: -1 });
+        let resumes = await resumeModel.find({}).sort({ createdAt: -1 }).populate('userId');
         return res.status(200).json({ message: "Resumes fetched all History successfully", resumes: resumes });
     }
     catch (err) {

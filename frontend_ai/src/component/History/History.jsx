@@ -1,51 +1,87 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './History.module.css'
 import Skeleton from "@mui/material/Skeleton";
 import withAuthHOC from '../../utils/HOC/withAuthHOC';
+import axios from '../../utils/axios';
+import { AuthContext } from '../../utils/AuthContext';
 
 const History = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const { userinfo } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`/api/resume/getresumes/${userinfo._id}`);
+        setData(response.data.resumes);
+      } catch (err) {
+        console.log(err);
+        alert("Failed to fetch history. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   return (
     <div className={styles.History}>
       <div className={styles.HistoryCardBlock}>
-        <Skeleton variant="rectangular" width={300} height={500} className={styles.HistoryCard} />
-        <div className={styles.HistoryCard}>
-          <div className={styles.CardPercentage}>80%</div>
-          <h2>Frontend developer</h2>
-          <p>Resume name: resume1.pdf</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-          <p>Dated: 2023-10-17</p>
-        </div>
-        <div className={styles.HistoryCard}>
-          <div className={styles.CardPercentage}>80%</div>
-          <h2>Frontend developer</h2>
-          <p>Resume name: resume1.pdf</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-          <p>Dated: 2023-10-17</p>
-        </div>
-        <div className={styles.HistoryCard}>
-          <div className={styles.CardPercentage}>80%</div>
-          <h2>Frontend developer</h2>
-          <p>Resume name: resume1.pdf</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-          <p>Dated: 2023-10-17</p>
-        </div>
-        <div className={styles.HistoryCard}>
-          <div className={styles.CardPercentage}>80%</div>
-          <h2>Frontend developer</h2>
-          <p>Resume name: resume1.pdf</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-          <p>Dated: 2023-10-17</p>
-        </div>
-        <div className={styles.HistoryCard}>
-          <div className={styles.CardPercentage}>80%</div>
-          <h2>Frontend developer</h2>
-          <p>Resume name: resume1.pdf</p>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-          <p>Dated: 2023-10-17</p>
-        </div>
+
+        {loading && (
+          Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton
+              key={i}
+              variant="rectangular"
+              height={340}
+              className={styles.HistoryCard}
+              sx={{ borderRadius: "18px" }}
+            />
+          ))
+        )}
+
+        {!loading && data.map((item) => (
+          <div key={item._id} className={styles.HistoryCard}>
+
+            <div className={styles.CardPercentage}>{item.score}%</div>
+
+            <h2 className={styles.JobTitle}>{item.jobTitle}</h2>
+
+            <p className={styles.ResumeName}>Resume: {item.resumeName}</p>
+
+            <div className={styles.SkillSection}>
+              <p className={styles.SkillLabel}>Matched Skills</p>
+              <div className={styles.SkillTags}>
+                {item.matchedSkills?.map((skill, i) => (
+                  <span key={i} className={styles.TagGreen}>{skill}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.SkillSection}>
+              <p className={styles.SkillLabel}>Missing Skills</p>
+              <div className={styles.SkillTags}>
+                {item.missingSkills?.map((skill, i) => (
+                  <span key={i} className={styles.TagRed}>{skill}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.FeedbackSection}>
+              <p className={styles.SkillLabel}>Feedback</p>
+              <p className={styles.FeedbackText}>{item.feedback}</p>
+            </div>
+
+            <p className={styles.Date}>Dated: {new Date(item.createdAt).toLocaleDateString()}</p>
+
+          </div>
+        ))}
+
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default withAuthHOC(History);

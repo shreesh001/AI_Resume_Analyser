@@ -146,7 +146,7 @@
 .analysisPlaceholder {
   width: 100%;
   background: #f1f2f6;
-  border-radius: 20px;
+  border-radius: 40px;
   padding: 28px 20px 24px;
   box-sizing: border-box;
   display: flex;
@@ -158,7 +158,7 @@
 .analysisText {
   display: flex;
   justify-content: center;
-  padding: 0 0 20px 0;
+  padding: 0 0 10px 0;
   font-size: 22px;
   font-weight: 700;
   color: #374151;
@@ -166,8 +166,8 @@
 }
 
 .profileImg {
-  width: 110px;
-  height: 110px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background: #d1d5db;
   margin: 0 auto 12px;
@@ -182,7 +182,7 @@ h2 {
   display: flex;
   justify-content: center;
   padding: 6px 0 0;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #1f2937;
   margin: 0;
@@ -194,14 +194,14 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 700;
   color: #1f2937;
   gap: 8px;
-  padding-top: 4px;
+  padding-bottom: 10px;
 }
 
-/* Fix: was 80px — way too large; now an inline accent icon */
+
 .resultIcon {
   font-size: 22px;
   color: #4f46e5;
@@ -214,6 +214,31 @@ h2 {
   font-size: 14.5px;
   color: #4b5563;
   line-height: 1.65;
+}
+
+.skillTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 4px;
+}
+
+.skillTagGreen {
+  background: #dcfce7;
+  color: #16a34a;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.skillTagRed {
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 /* ── Responsive ── */

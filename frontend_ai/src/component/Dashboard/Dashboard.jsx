@@ -7,16 +7,46 @@ import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import Skeleton from "@mui/material/Skeleton";
 import { BiBorderRadius } from "react-icons/bi";
 import withAuthHOC from "../../utils/HOC/withAuthHOC";
+import axios from "../../utils/axios";
+import { AuthContext } from "../../utils/AuthContext";
 
 const Dashboard = () => {
+
+  const [loading, setLoading] = useState(false);
   const [jobDescription, setJobDescription] = useState("");
   const [file, setFile] = useState(null);
+  const [result, setResult] = useState(null);
 
-  console.log("File:", file);
-  const handleAnalyze = () => {
+  const { userinfo } = React.useContext(AuthContext);
+  console.log("userinfo:", userinfo);
+
+  const handleAnalyze = async () => {
     if (!file || !jobDescription.trim()) {
-      alert("Upload resume and paste job description.");
+      alert("Upload resume and fill job description.");
       return;
+    }
+
+    if (!userinfo) {
+      alert("Please login first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("resume", file);
+    formData.append("jobDescription", jobDescription);
+    formData.append("userId", userinfo._id);
+
+    try {
+      setLoading(true);
+      const response = await axios.post('/api/resume/addresume', formData);
+      setResult(response.data.analysis);
+    }
+    catch (err) {
+      console.log(err);
+      alert("Something went wrong. Please try again.");
+    }
+    finally {
+      setLoading(false);
     }
 
     console.log("Analyzing...");
@@ -85,24 +115,63 @@ const Dashboard = () => {
       <div className={styles.right}>
         <div className={styles.analysisPlaceholder}>
           <div className={styles.analysisText}>Analyze with AI</div>
-          <img className={styles.profileImg} src="https://i.pinimg.com/736x/0b/43/42/0b4342451e511f651d461edb1c3a7df9.jpg" alt="" />
-          <h2>I_am_Caption</h2>
+          <img className={styles.profileImg} src={userinfo?.photoUrl} alt="Profile Image" />
+          <h2>{userinfo?.name || "User"}</h2>
         </div>
 
 
-        {/* <div className={styles.analysisPlaceholder}>
-          <div className={styles.analysisText}>Result</div>
-          <div className={styles.resultScore}>
-            73%
-            <CreditScoreIcon className={styles.resultIcon} />
-          </div>
-          
-          <div className={styles.resultText}>
-            <h2>Feedback :</h2>
-            <p className={styles.feedback}>Lorem  eaque omnis officia dolorum distinctio veniam unde nam, illum aperiam nesciunt porro, et necessitatibus! Officiis maxime aliquid doloribus iste illum voluptatibus et in consectetur consequuntur eius?Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptates nam dolorem error dignissimos sunt atque, at earum officiis beatae sit velit perspiciatis itaque dolor aliquid molestias qui totam, laudantium vitae iusto accusantium eveniet eum quo! Distinctio dolorum iste impedit, asperiores atque dolore placeat a illo voluptas sapiente, repellendus porro qui dicta! Veniam odio repellat doloremque optio, natus modi voluptatibus necessitatibus animi vitae sint. Pariatur enim sequi dignissimos fugit totam nisi culpa, laboriosam ipsa eligendi corrupti.</p>
-          </div>
-        </div> */}
-        <Skeleton variant="rectangular" width={300} height={500} sx={{borderRadius:"20px"}} />
+
+        {
+          result && (
+            <div className={styles.analysisPlaceholder}>
+              <div className={styles.analysisText}>Result</div>
+
+              <div className={styles.resultScore}>
+                {result.score}%
+                <CreditScoreIcon className={styles.resultIcon} />
+              </div>
+
+              <div className={styles.resultText}>
+                <h2>Matched Skills :</h2>
+                <div className={styles.skillTags}>
+                  {result.matchedSkills.map((skill, index) => (
+                    <span key={index} className={styles.skillTagGreen}>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.resultText}>
+                <h2>Missing Skills :</h2>
+                <div className={styles.skillTags}>
+                  {result.missingSkills.map((skill, index) => (
+                    <span key={index} className={styles.skillTagRed}>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.resultText}>
+                <h2>Feedback :</h2>
+                <p className={styles.feedback}>{result.feedback}</p>
+              </div>
+            </div>
+          )
+        }
+
+        {
+          loading && (
+            <Skeleton
+              variant="rectangular"
+              width={300}
+              height={500}
+              sx={{ borderRadius: "20px" }}
+            />
+          )
+        }
+
       </div>
     </div>
   );

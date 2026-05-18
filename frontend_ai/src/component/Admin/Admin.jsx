@@ -1,44 +1,83 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './Admin.module.css'
 import Skeleton from "@mui/material/Skeleton";
 import withAuthHOC from '../../utils/HOC/withAuthHOC';
+import axios from '../../utils/axios';
+import { AuthContext } from '../../utils/AuthContext';
 
-const History = () => {
+const Admin = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const { userinfo } = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get("/api/resume/getAdmin");
+        setData(response.data.resumes);
+      } catch (err) {
+        console.log(err);
+        alert("Failed to fetch history. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUserData();
+  }, []);
+
   return (
     <div className={styles.Admin}>
       <div className={styles.AdminCardBlock}>
-        <Skeleton variant="rectangular" width={300} height={500} className={styles.AdminCard} />
-        <div className={styles.AdminCard}>
-          <div className={styles.CardName}>I am Caption</div>
-          <p style={{color :"blue"}}>test1234@gmail.com</p>
-          <h3>Score: 80%</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-        </div>
 
-        <div className={styles.AdminCard}>
-          <div className={styles.CardName}>I am Caption</div>
-          <p style={{color :"blue"}}>test1234@gmail.com</p>
-          <h3>Score: 80%</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-        </div>
+        {loading && (
+          Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton
+              key={i}
+              variant="rectangular"
+              height={340}
+              className={styles.AdminCard}
+              sx={{ borderRadius: "18px" }}
+            />
+          ))
+        )}
 
-        <div className={styles.AdminCard}>
-          <div className={styles.CardName}>I am Caption</div>
-          <p style={{color :"blue"}}>test1234@gmail.com</p>
-          <h3>Score: 80%</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-        </div>
+        {!loading && data.map((item) => (
+          <div key={item._id} className={styles.AdminCard}>
 
-        <div className={styles.AdminCard}>
-          <div className={styles.CardName}>I am Caption</div>
-          <p style={{color :"blue"}}>test1234@gmail.com</p>
-          <h3>Score: 80%</h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam nam corporis obcaecati molestiae dignissimos, dolorem blanditiis iusto dicta amet? Consequuntur blanditiis quis assumenda fugit deleniti sapiente corporis minima illum voluptate eligendi, possimus similique quo! Lorem ipsum dolor sit amet consectetur adipisicing elit. Laborum, sint nam. Odio ipsum exercitationem expedita repellat illum, odit recusandae libero mollitia error deserunt unde est, culpa alias consectetur repudiandae quasi. Porro mollitia recusandae adipisci.</p>
-        </div>
+            <div className={styles.CardName}>{item.userId.name}</div>
+            <p className={styles.CardEmail}>{item.userId.email}</p>
+            <h3 className={styles.CardScore}>Score: {item.score}%</h3>
+
+            <div className={styles.SkillSection}>
+              <p className={styles.SkillLabel}>Matched Skills</p>
+              <div className={styles.SkillTags}>
+                {item.matchedSkills?.map((skill, i) => (
+                  <span key={i} className={styles.TagGreen}>{skill}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.SkillSection}>
+              <p className={styles.SkillLabel}>Missing Skills</p>
+              <div className={styles.SkillTags}>
+                {item.missingSkills?.map((skill, i) => (
+                  <span key={i} className={styles.TagRed}>{skill}</span>
+                ))}
+              </div>
+            </div>
+
+            <div className={styles.FeedbackSection}>
+              <p className={styles.SkillLabel}>Feedback</p>
+              <p className={styles.FeedbackText}>{item.feedback || "No feedback provided."}</p>
+            </div>
+
+          </div>
+        ))}
+
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default withAuthHOC(History);
-
+export default withAuthHOC(Admin);

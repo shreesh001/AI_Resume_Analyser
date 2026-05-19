@@ -1,34 +1,33 @@
-const { type } = require('firebase/firestore/pipelines');
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-const ResumeSchema= new mongoose.Schema({
-    userId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"users",
-        required:true
+const ResumeSchema = new mongoose.Schema({
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+        required: true
     },
-    resumeName:{
-        type:String,
-        required:true
+    resumeName: {
+        type: String,
+        required: true
     },
-    jobDescription:{
-        type:String,
-        required:true
+    jobDescription: {
+        type: String,
+        required: true
     },
-    score:{
-        type:String,
+    score: {
+        type: String,
     },
-    feedback:{
-        type:String,
+    feedback: {
+        type: String,
     },
-    matchedSkills:{
-        type:[String],
+    matchedSkills: {
+        type: [String],
     },
-    missingSkills:{
-        type:[String],
+    missingSkills: {
+        type: [String],
     }
-},{timestamps:true})
+}, { timestamps: true })
 
-const ResumeModel=mongoose.model("resumes",ResumeSchema);
+const ResumeModel = mongoose.model("resumes", ResumeSchema);
 
-module.exports=ResumeModel;
+module.exports = ResumeModel;

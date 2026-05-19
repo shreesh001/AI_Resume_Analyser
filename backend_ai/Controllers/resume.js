@@ -1,21 +1,15 @@
-
-const express = require('express');
 const resumeModel = require('../Models/resume');
 const pdfParse = require('pdf-parse/lib/pdf-parse');
-const axios = require('axios');
-const { CohereClient } = require('cohere-ai');
-
-
+const Groq = require('groq-sdk');
 const cloudinary = require('cloudinary').v2;
+
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const cohere = new CohereClient({
-    token: process.env.COHERE_API_KEY,
-});
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 exports.uploadResume = async (req, res) => {
     try {
@@ -33,12 +27,12 @@ exports.uploadResume = async (req, res) => {
 
         const resumeName = req.file.originalname;
 
-        //step 1 — parse PDF directly from buffer
+        // step 1 — parse PDF directly from buffer
         const pdfData = req.file.buffer;
         const parsedData = await pdfParse(pdfData);
         console.log("PDF Parsed Successfully");
 
-        //step 2 — upload to cloudinary separately
+        // step 2 — upload to cloudinary
         const cloudinaryUrl = await new Promise((resolve, reject) => {
             const stream = cloudinary.uploader.upload_stream(
                 { folder: 'resumes', resource_type: 'raw', format: 'pdf' },
@@ -52,12 +46,13 @@ exports.uploadResume = async (req, res) => {
         console.log("Uploaded to Cloudinary:", cloudinaryUrl);
 
         // step 3 — build the prompt
+        const resumeText = parsedData.text.slice(0, 4000); // ✅ limit to avoid token limits
         const prompt = `
             You are an expert resume screener and career coach.
             Your job is to compare the given resume with the job description and evaluate how well the candidate matches the role.
 
             Resume:
-            ${parsedData.text}
+            ${resumeText}
 
             Job Description:
             ${jobDescription}
@@ -77,15 +72,17 @@ exports.uploadResume = async (req, res) => {
             - 0-39   : Poor match, resume not suited for this role
         `;
 
-        // step 4 — call cohere
-        const response = await cohere.chat({
-            model: 'command-r-plus-08-2024',
-            message: prompt,
+        // step 4 — call groq
+        const response = await groq.chat.completions.create({
+            model: 'llama3-8b-8192',
+            messages: [{ role: 'user', content: prompt }],
             temperature: 0.5,
         });
 
         // step 5 — extract and parse result
-        let result = response.text;
+        let result = response.choices[0].message.content;
+        console.log("Raw AI Response:", result);
+
         const cleanResult = result.replace(/```json|```/g, '').trim();
         const parsedResult = JSON.parse(cleanResult);
         console.log("Score:", parsedResult.score);
@@ -96,7 +93,7 @@ exports.uploadResume = async (req, res) => {
             userId,
             jobDescription,
             resumeName,
-            resumePath: cloudinaryUrl,          
+            resumePath: cloudinaryUrl,
             score: parsedResult.score,
             feedback: parsedResult.feedback,
             matchedSkills: parsedResult.matchedSkills,

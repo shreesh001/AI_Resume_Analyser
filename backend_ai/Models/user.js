@@ -1,24 +1,22 @@
-const { type } = require('firebase/firestore/pipelines');
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-const userSchema= new mongoose.Schema({
-    email:{
-        type:String,
-        required:true
+const userSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true
     },
-    name:{
-        type :String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
-    role:{
-        type:String,
-        default:"user"
+    role: {
+        type: String,
+        default: "user"
     },
-    photoUrl:{
-        type:String
+    photoUrl: {
+        type: String
     }
-},{timestamps:true})
+}, { timestamps: true });
 
-const userModel=mongoose.model("users",userSchema);
-
-module.exports=userModel;   
+const userModel = mongoose.model("users", userSchema);
+module.exports = userModel;

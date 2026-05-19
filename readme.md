@@ -22,7 +22,7 @@ Recruiters spend an average of 6 seconds scanning a resume. **AI Resume Analyser
 
 The application:
 - Accepts a **PDF resume** and a **job description**
-- Uses **Cohere AI** to intelligently compare and evaluate the match
+- Uses **Groq AI** to intelligently compare and evaluate the match
 - Returns a **score out of 100**, a list of **matched and missing skills**, and **personalised feedback**
 - Stores all analyses in a **history dashboard** for future reference
 - Provides an **admin panel** to view all users and their resume analyses
@@ -31,7 +31,7 @@ The application:
 
 ## 🔗 Live Demo
 
-> Live Demo: [Add deployed link here]
+> Live Demo: https://ai-resume-analyser-beta-seven.vercel.app/
 
 ---
 
@@ -45,7 +45,7 @@ The application:
 ### 📊 Resume Analysis Dashboard
 - Upload PDF resume
 - Paste job description
-- AI-powered match analysis using **Cohere API**
+- AI-powered match analysis using **Groq API**
 - Resume match score (0–100)
 - Visual display of **matched skills** (green tags)
 - Visual display of **missing skills** (red tags)
@@ -86,7 +86,7 @@ The application:
 | Express.js | REST API framework |
 | Multer | PDF file upload handling |
 | pdf-parse | PDF text extraction |
-| Cohere AI | Resume analysis and scoring |
+| Groq AI | Resume analysis and scoring |
 
 ### Database
 | Technology | Purpose |
@@ -195,7 +195,7 @@ Create a `.env` file in `backend_ai/`:
 ```env
 PORT=4000
 MONGODB_URI=your_mongodb_connection_string
-COHERE_API_KEY=your_cohere_api_key
+GROQ_API_KEY=your_cohere_api_key
 ```
 
 Start the backend server:
@@ -254,7 +254,7 @@ npm run dev
 ```
 PORT                 → Express server port
 MONGODB_URI          → MongoDB connection string
-COHERE_API_KEY       → Cohere AI API key
+GROQ_API_KEY       → Cohere AI API key
 ```
 
 ### Frontend (`frontend_ai/.env`)

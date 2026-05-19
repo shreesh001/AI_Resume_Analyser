@@ -1,3 +1,4 @@
+const { type } = require('firebase/firestore/pipelines');
 const mongoose=require('mongoose');
 
 const ResumeSchema= new mongoose.Schema({

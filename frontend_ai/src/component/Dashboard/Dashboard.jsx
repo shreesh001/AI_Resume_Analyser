@@ -5,7 +5,6 @@ import ArticleIcon from "@mui/icons-material/Article";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
 import Skeleton from "@mui/material/Skeleton";
-import { BiBorderRadius } from "react-icons/bi";
 import withAuthHOC from "../../utils/HOC/withAuthHOC";
 import axios from "../../utils/axios";
 import { AuthContext } from "../../utils/AuthContext";

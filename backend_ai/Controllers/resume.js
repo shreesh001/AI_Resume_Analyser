@@ -1,30 +1,59 @@
+
+const express = require('express');
 const resumeModel = require('../Models/resume');
 const pdfParse = require('pdf-parse/lib/pdf-parse');
-const fs = require('fs');
+const axios = require('axios');
 const { CohereClient } = require('cohere-ai');
 
+
+const cloudinary = require('cloudinary').v2;
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 const cohere = new CohereClient({
-    token: "CfeyKnJl8ivAODO542S74jngZ93uzSnh18bUu6ob",
+    token: process.env.COHERE_API_KEY,
 });
 
 exports.uploadResume = async (req, res) => {
     try {
-        //step 1 — get text data from request
         const { userId, jobDescription } = req.body;
 
-        //step 2 — get file data from multer
-        const resumeName = req.file.originalname;
-        const resumePath = req.file.path;
+        if (!userId || userId === "undefined") {
+            return res.status(400).json({ error: "userId is required" });
+        }
+        if (!req.file) {
+            return res.status(400).json({ error: "Resume file is required" });
+        }
+        if (!jobDescription) {
+            return res.status(400).json({ error: "Job description is required" });
+        }
 
-        //step 3 — read and parse the pdf
-        const pdfData = fs.readFileSync(resumePath);
+        const resumeName = req.file.originalname;
+
+        //step 1 — parse PDF directly from buffer
+        const pdfData = req.file.buffer;
         const parsedData = await pdfParse(pdfData);
         console.log("PDF Parsed Successfully");
 
-        // step 4 — build the prompt
+        //step 2 — upload to cloudinary separately
+        const cloudinaryUrl = await new Promise((resolve, reject) => {
+            const stream = cloudinary.uploader.upload_stream(
+                { folder: 'resumes', resource_type: 'raw', format: 'pdf' },
+                (error, result) => {
+                    if (error) reject(error);
+                    else resolve(result.secure_url);
+                }
+            );
+            stream.end(req.file.buffer);
+        });
+        console.log("Uploaded to Cloudinary:", cloudinaryUrl);
+
+        // step 3 — build the prompt
         const prompt = `
             You are an expert resume screener and career coach.
-  
             Your job is to compare the given resume with the job description and evaluate how well the candidate matches the role.
 
             Resume:
@@ -48,29 +77,26 @@ exports.uploadResume = async (req, res) => {
             - 0-39   : Poor match, resume not suited for this role
         `;
 
-        //step 5 — call cohere with correct model and format
+        // step 4 — call cohere
         const response = await cohere.chat({
             model: 'command-r-plus-08-2024',
             message: prompt,
             temperature: 0.5,
         });
 
-        //step 6 — extract text from response
+        // step 5 — extract and parse result
         let result = response.text;
-        console.log("Raw AI Response:", result);
-
-        //step 7 — clean and parse the JSON
         const cleanResult = result.replace(/```json|```/g, '').trim();
         const parsedResult = JSON.parse(cleanResult);
         console.log("Score:", parsedResult.score);
         console.log("Feedback:", parsedResult.feedback);
 
-        //step 8 — save to database with score and feedback
+        // step 6 — save to database
         const newResume = new resumeModel({
             userId,
             jobDescription,
             resumeName,
-            resumePath,
+            resumePath: cloudinaryUrl,          
             score: parsedResult.score,
             feedback: parsedResult.feedback,
             matchedSkills: parsedResult.matchedSkills,
@@ -79,9 +105,7 @@ exports.uploadResume = async (req, res) => {
 
         await newResume.save();
 
-        fs.unlinkSync(resumePath); // delete the uploaded file after processing
-
-        //step 9 — send full response to frontend
+        // step 7 — send response
         res.status(200).json({
             message: "Resume uploaded successfully",
             resume: newResume,
@@ -97,8 +121,19 @@ exports.uploadResume = async (req, res) => {
 exports.getallResumeforUser = async (req, res) => {
     try {
         const { userId } = req.params;
-        let resumes = await resumeModel.find({ userId }).sort({ createdAt: -1 });
-        return res.status(200).json({ message: "Resumes fetched successfully", resumes: resumes });
+
+        if (!userId) {
+            return res.status(400).json({ error: "userId is required" });
+        }
+
+        const resumes = await resumeModel
+            .find({ userId })
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            message: "Resumes fetched successfully",
+            resumes
+        });
     }
     catch (err) {
         console.log(err);
@@ -108,12 +143,18 @@ exports.getallResumeforUser = async (req, res) => {
 
 exports.getallResumeforAdmin = async (req, res) => {
     try {
-        let resumes = await resumeModel.find({}).sort({ createdAt: -1 }).populate('userId');
-        return res.status(200).json({ message: "Resumes fetched all History successfully", resumes: resumes });
+        const resumes = await resumeModel
+            .find({})
+            .sort({ createdAt: -1 })
+            .populate('userId');
+
+        return res.status(200).json({
+            message: "Resumes fetched successfully",
+            resumes
+        });
     }
     catch (err) {
         console.log(err);
         res.status(500).send({ error: "Server Error", message: err.message });
     }
 }
-

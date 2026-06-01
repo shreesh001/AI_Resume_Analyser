@@ -11,8 +11,6 @@
 ![Node.js](https://img.shields.io/badge/Node.js-Express-green?style=for-the-badge&logo=node.js)
 ![MongoDB](https://img.shields.io/badge/Database-MongoDB-brightgreen?style=for-the-badge&logo=mongodb)
 ![Firebase](https://img.shields.io/badge/Auth-Firebase-orange?style=for-the-badge&logo=firebase)
-![AI Powered](https://img.shields.io/badge/AI-Cohere-purple?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
 ---
 
@@ -170,7 +168,7 @@ AI_RESUME_ANALYSER/
 - Node.js v20+ (LTS recommended)
 - MongoDB Atlas account or local MongoDB
 - Firebase project with Google Auth enabled
-- Cohere API key
+- Groq API key
 
 ---
 
@@ -195,7 +193,7 @@ Create a `.env` file in `backend_ai/`:
 ```env
 PORT=4000
 MONGODB_URI=your_mongodb_connection_string
-GROQ_API_KEY=your_cohere_api_key
+GROQ_API_KEY=your_groq_api_key
 ```
 
 Start the backend server:
@@ -254,7 +252,7 @@ npm run dev
 ```
 PORT                 → Express server port
 MONGODB_URI          → MongoDB connection string
-GROQ_API_KEY       → Cohere AI API key
+GROQ_API_KEY         → Groq AI API key
 ```
 
 ### Frontend (`frontend_ai/.env`)

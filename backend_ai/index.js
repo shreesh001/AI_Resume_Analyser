@@ -12,7 +12,7 @@ app.use(cors({
     credentials: true,
     origin: [
         'http://localhost:5173',
-        'https://ai-resume-analyser-beta-seven.vercel.app' 
+        'https://ai-resume-analyser-beta-seven.vercel.app'
     ]
 }));
 
